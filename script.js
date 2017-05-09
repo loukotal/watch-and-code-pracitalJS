@@ -8,6 +8,10 @@
 // .displayTodos should tell you if .todos is empty
 // .displayTodos should show .completed
 
+
+// V6: requirements:
+// .toggleAll if everything is true make everything false
+// .toggleAll otherwise make everything true
 var todoList = {
     todos: [],
     displayTodos: function() {
@@ -61,6 +65,29 @@ var todoList = {
         //     this.todos[position].completed = true;
         // }
         this.displayTodos();
+    },
+    toggleAll: function() {
+        var totalTodos = this.todos.length;
+        var completedTodos = 0;
+        // count number of completedTodos
+        for (var i = 0; i < totalTodos; i++) {
+            if(this.todos[i].completed) {
+                completedTodos++;
+            }
+        }
+        // if all todos === true, make them all false
+        if (completedTodos === totalTodos) {
+            for (var i = 0; i < totalTodos; i++) {
+                this.todos[i].completed = false;
+            }
+        } else {
+            for (var i = 0; i < totalTodos; i++) {
+                this.todos[i].completed = true;
+                
+            }
+        }
+        this.displayTodos();
+        
     }
     
 };
@@ -68,10 +95,13 @@ var todoList = {
 todoList.displayTodos();
 todoList.addTodo("item 1")
 todoList.addTodo("item 2")
+ todoList.toggleCompleted(0);
+// todoList.toggleCompleted(1);
+todoList.toggleAll();
+todoList.toggleAll();
 todoList.changeTodo(0, "changed first item")
 todoList.removeTodo(1);
 todoList.toggleCompleted(0);
-todoList.toggleCompleted(0);
-todoList.toggleCompleted(0);
+
 
 
