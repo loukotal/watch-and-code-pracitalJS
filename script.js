@@ -61,6 +61,7 @@ var todoList = {
         this.displayTodos();
     },
     toggleCompleted: function(position) {
+        debugger;
         var todo = this.todos[position];
         //more logical
         todo.completed = !todo.completed;
@@ -99,15 +100,25 @@ var todoList = {
 };
 
 // V7: We want to get access to the display todos button
-var displayTodosButton = document.getElementById("displayTodosButton");
-var toggleAllButton = document.getElementById("toggleAllButton");
+// var displayTodosButton = document.getElementById("displayTodosButton");
+// var toggleAllButton = document.getElementById("toggleAllButton");
 
-displayTodosButton.addEventListener("click", function() {
-    todoList.displayTodos();
-});
-toggleAllButton.addEventListener("click", function(){
-    todoList.toggleAll();
-});
+// displayTodosButton.addEventListener("click", function() {
+//     todoList.displayTodos();
+// });
+// toggleAllButton.addEventListener("click", function(){
+//     todoList.toggleAll();
+// });
+
+// 1st refactoring: adding handlers object and in the index.html adding onclick attributes
+var handlers = {
+    displayTodos: function() {
+        todoList.displayTodos();
+    },
+    toggleAll: function() {
+        todoList.toggleAll();
+    }
+};
 
 // todoList.displayTodos();
 // todoList.addTodo("item 1")
