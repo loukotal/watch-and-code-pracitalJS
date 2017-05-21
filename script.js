@@ -19,6 +19,12 @@
 // Clicking "Display Todos" should run todoList.displayTodos
 // Clicking "Toggle All" should run todoList.toggleAll
 
+// V8 requirements:
+// It should have working controls for .addTodo
+// It should have working controls for .changeTodo
+// It should have working controls for .deleteTodo
+// It should have working controls for .toggleCompleted
+
 var todoList = {
     todos: [],
     displayTodos: function() {
@@ -56,12 +62,11 @@ var todoList = {
         this.todos[position].todoText = todoText;
         this.displayTodos();
     },
-    removeTodo: function(position) {
+    deleteTodo: function(position) {
         this.todos.splice(position, 1);
         this.displayTodos();
     },
     toggleCompleted: function(position) {
-        debugger;
         var todo = this.todos[position];
         //more logical
         todo.completed = !todo.completed;
@@ -115,6 +120,46 @@ var handlers = {
     displayTodos: function() {
         todoList.displayTodos();
     },
+    addTodo: function() {
+        var addTodoTextInput = document.getElementById("addTodoTextInput");
+        if (addTodoTextInput.value === "") {
+            console.log("Please add some text to your todo.");
+            
+        } else {
+            todoList.addTodo(addTodoTextInput.value);
+        }
+        
+        addTodoTextInput.value = "";
+     },
+    changeTodo: function() {
+        var changeTodoTextPosition = document.getElementById("changeTodoTextPosition");
+        var changeTodoTextInput = document.getElementById("changeTodoTextInput");
+
+        if (changeTodoTextPosition.value >= todoList.length || changeTodoTextPosition.value < 0) {
+            console.log("index out of bounds.");
+            
+        } else {
+            todoList.changeTodo(changeTodoTextPosition.valueAsNumber, changeTodoTextInput.value);
+        }
+        changeTodoTextInput.value = "";
+        changeTodoTextPosition.value = "";
+    },
+    deleteTodo: function() {
+        var deleteTodoTextNumber = document.getElementById("deleteTodoTextNumber");
+
+        if (deleteTodoTextNumber.valueAsNumber >= todoList.todos.length || deleteTodoTextNumber.valueAsNumber < 0) {
+            console.log("delete index out of bounds");
+        } else {
+            todoList.deleteTodo(deleteTodoTextNumber.valueAsNumber);
+        }
+        deleteTodoTextNumber.value = "";
+
+    },
+    toggleCompleted: function() {
+        var toggleTodoPositionInput = document.getElementById("toggleTodoPositionInput")
+        todoList.toggleCompleted(toggleTodoPositionInput.valueAsNumber);
+        toggleTodoPositionInput.value = "";
+    },
     toggleAll: function() {
         todoList.toggleAll();
     }
@@ -128,7 +173,7 @@ var handlers = {
 // todoList.toggleAll();
 // todoList.toggleAll();
 // todoList.changeTodo(0, "changed first item")
-// todoList.removeTodo(1);
+// todoList deleteTodo(1);
 // todoList.toggleCompleted(0);
 
 
