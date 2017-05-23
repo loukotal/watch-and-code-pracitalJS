@@ -25,46 +25,26 @@
 // It should have working controls for .deleteTodo
 // It should have working controls for .toggleCompleted
 
+
+// V9 requirements:
+// There should be an li element for every todo
+// Each li element should contain .todoText
+// Each li element should show .completed
+
 var todoList = {
     todos: [],
-    displayTodos: function() {
-        var todo = this.todos;
-        // if todo.length === 0, todo.length is false
-        // if (!todo.length) {
-        if (todo.length === 0) {
-            console.log("Your todo list is empty!");
-        } else {
-            console.log("My todos:");
-            var completed = "";
-            for (var i = 0; i < todo.length; i++) {
-                // if completed === true
-                if (todo[i].completed) {
-                    // ,,mark'' as done
-                    completed = "(x)";
-                }
-                else {
-                    completed = "( )";
-                }
-                console.log(completed, todo[i].todoText);
-                
-            }
-        }   
-    },
     addTodo: function(todoText) {
         this.todos.push(
             {
                 todoText: todoText,
                 completed: false
         });
-        this.displayTodos();
     },
     changeTodo: function(position, todoText) {
         this.todos[position].todoText = todoText;
-        this.displayTodos();
     },
     deleteTodo: function(position) {
         this.todos.splice(position, 1);
-        this.displayTodos();
     },
     toggleCompleted: function(position) {
         var todo = this.todos[position];
@@ -76,7 +56,6 @@ var todoList = {
         // } else {
         //     this.todos[position].completed = true;
         // }
-        this.displayTodos();
     },
     toggleAll: function() {
         var totalTodos = this.todos.length;
@@ -98,7 +77,6 @@ var todoList = {
                 
             }
         }
-        this.displayTodos();
         
     }
     
@@ -117,19 +95,16 @@ var todoList = {
 
 // 1st refactoring: adding handlers object and in the index.html adding onclick attributes
 var handlers = {
-    displayTodos: function() {
-        todoList.displayTodos();
-    },
     addTodo: function() {
         var addTodoTextInput = document.getElementById("addTodoTextInput");
-        if (addTodoTextInput.value === "") {
-            console.log("Please add some text to your todo.");
-            
-        } else {
+        if (addTodoTextInput.value !== "") {
             todoList.addTodo(addTodoTextInput.value);
         }
+            
+        
         
         addTodoTextInput.value = "";
+        view.displayTodos();
      },
     changeTodo: function() {
         var changeTodoTextPosition = document.getElementById("changeTodoTextPosition");
@@ -143,6 +118,7 @@ var handlers = {
         }
         changeTodoTextInput.value = "";
         changeTodoTextPosition.value = "";
+        view.displayTodos();
     },
     deleteTodo: function() {
         var deleteTodoTextNumber = document.getElementById("deleteTodoTextNumber");
@@ -153,17 +129,68 @@ var handlers = {
             todoList.deleteTodo(deleteTodoTextNumber.valueAsNumber);
         }
         deleteTodoTextNumber.value = "";
+        view.displayTodos();
 
     },
     toggleCompleted: function() {
         var toggleTodoPositionInput = document.getElementById("toggleTodoPositionInput")
         todoList.toggleCompleted(toggleTodoPositionInput.valueAsNumber);
         toggleTodoPositionInput.value = "";
+        view.displayTodos();
     },
     toggleAll: function() {
         todoList.toggleAll();
+        view.displayTodos();
     }
 };
+var view = {
+    displayTodos: function() {
+        // grab reference to the ul element in the html file
+        var todosUl = document.querySelector("ul");
+        // reset the html inside the ul 
+        todosUl.innerHTML = "";
+        // declare variable used in the for loop, so they dont get re-declared
+        var todoLi = "";
+        var todoTextWithCompletion = "";
+        var todo = "";
+
+        // Handle empty todo list
+        if (todoList.todos.length === 0) {
+            todoTextWithCompletion = "Your todo list is empty!"
+            todoLi = document.createElement("li");
+            todoLi.textContent = todoTextWithCompletion;
+            todosUl.appendChild(todoLi);
+        } else {
+            for (var i = 0; i < todoList.todos.length; i++) {
+                //reference todoList.todos[i] (less typing)
+                todo = todoList.todos[i];
+                // create li element
+                todoLi = document.createElement("li");
+
+                // change todoTextWithCompletion based on if completed or not
+                if (todo.completed) {
+                    todoTextWithCompletion = "(x) " + todo.todoText;
+                }
+                else {
+                    todoTextWithCompletion = "( ) " + todo.todoText;
+                }
+                // add the text to the <li></li> element. (<li>textContent</li>)
+                todoLi.textContent = todoTextWithCompletion;
+                // append it to the ul element
+                todosUl.appendChild(todoLi);
+            }
+        }
+    }
+};
+
+
+// for (var i = 0; i < todoList.todos.length; i++){
+    
+//     todoLi.value = todos[i];
+//     todoUl.appendChild(todoLi);
+//     console.log(todoLi);
+    
+// }
 
 // todoList.displayTodos();
 // todoList.addTodo("item 1")
@@ -176,5 +203,8 @@ var handlers = {
 // todoList deleteTodo(1);
 // todoList.toggleCompleted(0);
 
-
+function runWithDebugger(func){
+    debugger;
+    func();
+}
 
