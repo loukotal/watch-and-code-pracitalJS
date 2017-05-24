@@ -31,6 +31,13 @@
 // Each li element should contain .todoText
 // Each li element should show .completed
 
+// V10 requirements:
+// There should be a way to delete buttons
+// There should be a delete button for every todo
+// Each li should have an id that has the todo position
+// Delete button should have access to the todo id
+// Clicking delete should update todoList.todos and the DOM
+
 var todoList = {
     todos: [],
     addTodo: function(todoText) {
@@ -120,15 +127,8 @@ var handlers = {
         changeTodoTextPosition.value = "";
         view.displayTodos();
     },
-    deleteTodo: function() {
-        var deleteTodoTextNumber = document.getElementById("deleteTodoTextNumber");
-
-        if (deleteTodoTextNumber.valueAsNumber >= todoList.todos.length || deleteTodoTextNumber.valueAsNumber < 0) {
-            console.log("delete index out of bounds");
-        } else {
-            todoList.deleteTodo(deleteTodoTextNumber.valueAsNumber);
-        }
-        deleteTodoTextNumber.value = "";
+    deleteTodo: function(position) {
+        todoList.deleteTodo(position);
         view.displayTodos();
 
     },
@@ -162,6 +162,7 @@ var view = {
             todosUl.appendChild(todoLi);
         } else {
             for (var i = 0; i < todoList.todos.length; i++) {
+                
                 //reference todoList.todos[i] (less typing)
                 todo = todoList.todos[i];
                 // create li element
@@ -169,39 +170,53 @@ var view = {
 
                 // change todoTextWithCompletion based on if completed or not
                 if (todo.completed) {
-                    todoTextWithCompletion = "(x) " + todo.todoText;
+                    todoTextWithCompletion = "(x) " + todo.todoText + " ";
                 }
                 else {
-                    todoTextWithCompletion = "( ) " + todo.todoText;
+                    todoTextWithCompletion = "( ) " + todo.todoText + " ";
                 }
+                // set id of the li element to the i position.
+                todoLi.id = i;
                 // add the text to the <li></li> element. (<li>textContent</li>)
                 todoLi.textContent = todoTextWithCompletion;
+                // create buttons based on number of items in the list
+                todoLi.appendChild(this.createDeleteButton());
                 // append it to the ul element
                 todosUl.appendChild(todoLi);
+                
             }
         }
+    },
+    // creates delete buttons
+    createDeleteButton: function() {
+        // create button element
+        var deleteButton = document.createElement("button");
+        // text in the button
+        deleteButton.textContent = "Delete";
+        // assign class name to the created button
+        deleteButton.className = "deleteButton";
+        return deleteButton;
+    },
+    setUpEventListeners: function(){
+        // Grab reference to ul element
+        var todosUl = document.querySelector("ul");
+
+        // add event listener to the ul element
+        todosUl.addEventListener("click", function(event){
+            // grab reference to the target that was clicked 
+            var elementClicked = event.target;
+            // check if it was the button (check using the assigned class)
+            if(elementClicked.className === "deleteButton"){
+            // run function in the handlers object - parentNode is the parent of the clicked element.
+            // Button is clicked - parent is li element - it grabs the id (which is assigned in the view.displayTodos() function)
+            handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+            view.displayTodos();
+            }
+        });
     }
 };
 
-
-// for (var i = 0; i < todoList.todos.length; i++){
-    
-//     todoLi.value = todos[i];
-//     todoUl.appendChild(todoLi);
-//     console.log(todoLi);
-    
-// }
-
-// todoList.displayTodos();
-// todoList.addTodo("item 1")
-// todoList.addTodo("item 2")
-// todoList.toggleCompleted(0);
-// // todoList.toggleCompleted(1);
-// todoList.toggleAll();
-// todoList.toggleAll();
-// todoList.changeTodo(0, "changed first item")
-// todoList deleteTodo(1);
-// todoList.toggleCompleted(0);
+view.setUpEventListeners();
 
 function runWithDebugger(func){
     debugger;
