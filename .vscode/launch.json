@@ -5,14 +5,14 @@
         "type": "chrome",
         "request": "launch",
         "name": "Launch Chrome",
-        "url": "http://localhost:8080",
+        "url": "http://localhost:8000",
         "webRoot": "${workspaceRoot}"
     },
         {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
+            "url": "http://localhost:8000",
             "webRoot": "${workspaceRoot}"
         },
         {
